@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.rb.login.mapper.RoleMapper">
+    <resultMap id="RoleResultMap" type="com.rb.login.model.entity.Role">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+    </resultMap>
+
+    <!-- 保存角色信息 -->
+    <insert id="save" parameterType="com.rb.login.model.entity.Role" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO `sys_role`(`code`, `name`)
+            VALUE (#{role.code},#{role.name});
+    </insert>
+
+    <!-- 更新角色信息 -->
+    <update id="update" parameterType="com.rb.login.model.entity.Role">
+        UPDATE
+            `sys_role`
+        SET `code`=#{role.code},
+            `name`=#{role.name}
+        WHERE id = #{role.id}
+    </update>
+
+    <!-- 根据角色id查询角色详情 -->
+    <select id="findById" resultMap="RoleResultMap">
+        select *
+        from sys_role
+        where id = #{id}
+    </select>
+
+    <!-- 根据名称查询角色详情 -->
+    <select id="findByName" resultMap="RoleResultMap">
+        select *
+        from sys_role
+        where name = #{name}
+    </select>
+
+    <!-- 查询所有 -->
+    <select id="findAll" resultMap="RoleResultMap">
+        select *
+        from sys_role
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="findByPage" resultMap="RoleResultMap">
+        select *
+        from sys_role limit #{start}, #{count}
+    </select>
+
+    <!-- 删除角色 -->
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete
+        from sys_role
+        where id = #{id}
+    </delete>
+
+    <!--查询记录数-->
+    <select id="count" resultType="java.lang.Integer">
+        select count(*)
+        from sys_role
+    </select>
+
+    <!--根据名称查询条数-->
+    <select id="countByName" resultType="java.lang.Integer">
+        select count(*)
+        from sys_role
+        where name = #{name}
+    </select>
+
+</mapper>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>用户列表</title>
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+
+    <!-- jqgrid-->
+    <link href="css/plugins/jqgrid/ui.jqgrid.css?0820" rel="stylesheet">
+
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css?v=4.1.0" rel="stylesheet">
+
+    <style>
+        /* Additional style to fix warning dialog position */
+
+        #alertmod_table_list_2 {
+            top: 900px !important;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content  animated fadeInRight">
+    <!-- /.page-header -->
+	        <form id="search_form" class="form-horizontal" role="form">
+	          <div class="row dataTables_wrapper">
+	            <div class="col-sm-12">
+	              <div class="row">
+	              	<div id="button_group" class="col-lg-5  pull-left no-padding">
+	                	<button type="button" class="btn btn-primary"data-toggle="button" id="add">新建</button>
+	                	<button type="button" class="btn btn-primary"data-toggle="button" id="edit">修改</button>
+	                	<button type="button" class="btn btn-primary"data-toggle="button" id="del">删除</button>
+	                	<button type="button" class="btn btn-primary"data-toggle="button" id="info">详情</button>
+                        <button type="button" class="btn btn-primary"data-toggle="button" id="grant">授权角色</button>
+	                </div>
+	              </div>
+	            </div>
+	            <!-- PAGE CONTENT ENDS -->
+	            <!-- /.col -->
+	          </div>
+	        </form>
+	        <!-- /.row -->
+
+        		<div class="modal bs-example-modal-lg fade" id="myModal">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content" id="cre_modal">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								<h4 class="modal-title" id="myModalLabel">
+									用户信息
+								</h4>
+							</div>
+							<div class="modal-body text-center" id="cre_taskInfo_body">
+								<form method="get" class="form-horizontal" id="form">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">姓名</label>
+
+                                <div class="col-sm-10">
+                                    <input type="hidden" class="form-control" name="id" id="id">
+                                </div>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="userName" id="userName" >
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">密码</label>
+
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="password" id="password" >
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">手机号</label>
+
+                                <div class="col-sm-10">
+                                    <input type="number" oninput="if(value.length>11)value=value.slice(0,11)" class="form-control" name="phone" id="phone" >
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                        </form>
+								<!-- PAGE CONTENT BEGINS -->
+							</div>
+							<div class="modal-footer" id="clearfix_btn_div">
+								<button type="button" class="btn btn-primary" id="saveTask_btn">
+									保存
+								</button>
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal" id="closeTask_btn">
+									关闭
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!--model end  -->
+
+        <!-- 角色列表 -->
+        <div class="modal bs-example-modal-lg fade" id="myRoleModal">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" id="role_modal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myRoleModalLabel">
+                            角色信息
+                        </h4>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="ibox ">
+                                    <div class="jqGrid_wrapper">
+                                        <table id="role_list"></table>
+                                        <button type="button" class="btn btn-primary" id="saveUserRole">
+                                            保存
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox ">
+                        <div class="jqGrid_wrapper">
+                            <table id="table_list_2"></table>
+                            <div id="pager_list_2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+
+    <!-- Peity -->
+    <script src="js/plugins/peity/jquery.peity.min.js"></script>
+	<script src="js/jquery.messager.js"></script>
+	<script src="js/jquery.dialog.js"></script>
+    <!-- jqGrid -->
+    <script src="js/plugins/jqgrid/i18n/grid.locale-cn.js?0820"></script>
+    <script src="js/plugins/jqgrid/jquery.jqGrid.min.js?0820"></script>
+
+    <!-- 自定义js -->
+    <script src="js/content.js?v=1.0.0"></script>
+	<script src="js/common.js"></script>
+
+    <!-- Page-Level Scripts -->
+    <script>
+    	function backBySeleteTask() {
+		    var rowid = $("#table_list_2").getGridParam("selrow");
+		    var rowData = $("#table_list_2").getRowData(rowid);
+		    var flag = true;
+		    if (rowid == null) {
+		        $.messager.alert("提示信息","请选择一条记录");
+		        return false;
+		    }else{
+		    	$.get(__apiRoot+"/data/user/"+rowData.id,
+				  {
+				    access_token:JSON.parse(localStorage.token)
+				  },
+				  function(data,status){
+				    if("success" == status ){
+				    	$("#id").val(data.id);
+					    $("#userName").val(data.userName);
+					    $("#password").val(data.password);
+					    $("#phone").val(data.phone);
+					    $("#myModal").modal('show');//弹出模态框
+				    }else{
+				    	$.messager.alert("提示信息",data);
+				  	}
+				  }
+				);
+		    }
+		}
+    </script>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $.jgrid.defaults.styleUI = 'Bootstrap';
+            // Configuration for jqGrid Example 2
+            $("#table_list_2").jqGrid({
+                mtype: 'GET',
+        		url: __apiRoot+"/data/user?access_token="+JSON.parse(localStorage.token),
+                datatype: "json",
+                height: "auto",
+                autowidth: true,
+                shrinkToFit: true,
+                colNames: ['序号', '姓名', '手机号'],
+                colModel: [
+                    {
+                        name: 'id',
+                        index: 'id',
+                        width: 60,
+                        sorttype: "int"
+                    },
+                    {
+                        name: 'userName',
+                        index: 'userName',
+                        width: 90,
+                    },
+                    {
+                        name: 'phone',
+                        index: 'phone',
+                        width: 100,
+                    }
+                ],
+                viewrecords: true,
+                caption: "用户列表",
+                hidegrid: false,
+                loadError: function(xhr,status,error){
+                    alert(JSON.parse(xhr.responseText).msg);
+                }
+            });
+
+            $("#role_list").jqGrid({
+                mtype: 'GET',
+                url: __apiRoot+"/data/role?access_token="+JSON.parse(localStorage.token),
+                datatype: "json",
+                height: "auto",
+                multiselect: true,
+                autowidth: true,
+                shrinkToFit: true,
+                colNames: ['序号', '角色名称'],
+                colModel: [
+                    {
+                        name: 'id',
+                        index: 'id',
+                        width: 60,
+                        sorttype: "int"
+                    },
+                    {
+                        name: 'name',
+                        index: 'name',
+                        width: 90,
+                    }
+                ],
+                viewrecords: true,
+                caption: "角色列表",
+                hidegrid: false,
+                loadError: function(xhr,status,error){
+                    alert(JSON.parse(xhr.responseText).msg);
+                }
+            });
+
+
+			//添加
+			$("#add").click(function(){
+				$('#form')[0].reset();
+				$('#id').val("");
+				//先将保存按钮设置为可用
+    			$("#saveTask_btn").show();
+				$("#myModal").modal('show');//弹出模态框
+			});
+
+			//点击保存按钮
+			$("#saveTask_btn").click(function(){
+			    var data = {
+                    id:$("#id").val(),
+                    userName:$("#userName").val(),
+                    password:$("#password").val(),
+                    phone:$("#phone").val()
+                };
+                $.ajax({
+                    // 请求方式
+                    type:"post",
+                    // contentType
+                    contentType:"application/json",
+                    // dataType
+                    dataType:"json",
+                    // url
+                    url:__apiRoot+"/data/user?access_token="+JSON.parse(localStorage.token),
+                    // 把JS的对象或数组序列化一个json 字符串
+                    data:JSON.stringify(data),
+                    // result 为请求的返回结果对象
+                    success:function (result) {
+                        $.messager.alert("提示信息","保存成功");
+                        $('#myModal').modal('hide');
+                        jQuery("#table_list_2").trigger("reloadGrid");
+                    },
+                    error:function(data){
+                        $.messager.alert("提示信息",data);
+                    }
+                });
+			});
+
+			//修改
+			$("#edit").click(function(){
+				//先将保存按钮设置为可用
+    			$("#saveTask_btn").show();
+				backBySeleteTask();
+			});
+
+			//查看详情
+			$("#info").click(function(){
+				backBySeleteTask();
+				//$("#saveTask_btn").attr("style","display:none;");
+				$("#saveTask_btn").hide();
+			});
+
+            //选择角色列表
+            $("#grant").click(function(){
+                var rowid = $("#table_list_2").getGridParam("selrow");
+                var rowData = $("#table_list_2").getRowData(rowid);
+                var flag = true;
+                if (rowid == null) {
+                    $.messager.alert("提示信息","请选择一条记录");
+                    return false;
+                }else{
+                    jQuery("#role_list").trigger("reloadGrid");
+                    //弹出角色模态框
+                    $("#myRoleModal").modal('show');
+                }
+            });
+
+            //授权
+            $("#saveUserRole").click(function(){
+                //获取选中行的id数组
+                var ids = $("#role_list").getGridParam("selarrrow")
+                var rowid = $("#table_list_2").getGridParam("selrow");
+                var rowData = $("#table_list_2").getRowData(rowid);
+                $.ajax({
+                    // 请求方式
+                    type:"post",
+                    // contentType
+                    contentType:"application/json",
+                    // dataType
+                    dataType:"json",
+                    // url
+                    url:__apiRoot+"/data/user/grant/"+rowData.id+"?access_token="+JSON.parse(localStorage.token),
+                    data:JSON.stringify(ids),
+                    success:function (result) {
+                        $('#myRoleModal').modal('hide');
+                        $.messager.alert("提示信息","授权成功");
+                    },
+                    error:function(data){
+                        $.messager.alert("提示信息",data);
+                    }
+                });
+            });
+
+
+			//删除
+			$("#del").click(function(){
+				$.messager.model = {
+			                ok: {
+			                    text: "确认"
+			                },
+			                cancel: {
+			                    text: "取消"
+			                }
+			            };
+			            $.messager.confirm("提示信息", "是否删除选中记录？",
+			            function(data) {
+			            	if(data){
+				            	var rowid = $("#table_list_2").getGridParam("selrow");
+			    				var rowData = $("#table_list_2").getRowData(rowid);
+			    				if(rowid == null){
+			    					$.messager.alert("提示信息","请选择一条数据");
+			    					return false;
+			    				}else{
+                                    $.ajax({
+                                        // 请求方式
+                                        type:"delete",
+                                        // contentType
+                                        contentType:"application/json",
+                                        // dataType
+                                        dataType:"json",
+                                        // url
+                                        url:__apiRoot+"/data/user/"+rowData.id+"?access_token="+JSON.parse(localStorage.token),
+                                        // result 为请求的返回结果对象
+                                        success:function (result) {
+                                            $.messager.alert("提示信息","删除成功");
+                                            $('#table_list_2').setGridParam({page : 1}).trigger("reloadGrid");
+                                        },
+                                        error:function(data){
+                                            $.messager.alert("提示信息",data);
+                                        }
+                                    });
+			    				}
+			            	}else{
+			            		return false;
+			            	}
+			            });
+			});
+
+            // Add selection
+            $("#table_list_2").setSelection(4, true);
+
+            // Add responsive to jqGrid
+            $(window).bind('resize', function () {
+                var width = $('.jqGrid_wrapper').width();
+                $('#table_list_2').setGridWidth(width);
+                $('#role_list').setGridWidth(width);
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.rb.login.mapper.LoginMapper">
+    <resultMap id="LoginRecordResultMap" type="com.rb.login.model.entity.LoginRecord">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="count" jdbcType="INTEGER" property="count"/>
+    </resultMap>
+
+
+    <!-- sys_login数据库 -->
+    <!-- 保存用户和tokenId的关系 -->
+    <insert id="saveLogin">
+        INSERT INTO `sys_login`(`user_name`, `token_id`)
+            VALUE (#{userName},#{tokenId});
+    </insert>
+
+    <!-- 根据用户名称和tokenId查询记录条数 -->
+    <select id="countLogin" resultType="java.lang.Integer">
+        select *
+        from sys_login
+        where user_name = #{userName} and token_id = #{tokenId}
+    </select>
+
+    <!-- 根据token获取用户名称 -->
+    <select id="findUserNameByTokenId" resultType="java.lang.String">
+        select user_name
+        from sys_login
+        where token_id = #{tokenId}
+    </select>
+
+
+
+    <!-- sys_login_count 数据库 -->
+    <!-- 根据用户名称查询登录次数 -->
+    <select id="countLoginByUserName" resultType="java.lang.Integer">
+        select count
+        from sys_login_count
+        where user_name = #{userName}
+    </select>
+
+    <!-- 首次登录插入登录记录 -->
+    <insert id="firstLogin">
+        INSERT INTO `sys_login_count`(`user_name`, `count`)
+            VALUE (#{userName}, 1);
+    </insert>
+
+    <!-- 登录次数+1 -->
+    <update id="addLogin">
+        update sys_login_count
+        set count = count + 1
+        where user_name = #{userName}
+    </update>
+
+    <!-- 查询所有登录记录 -->
+    <select id="findAll" resultMap="LoginRecordResultMap">
+        select *
+        from sys_login_count
+    </select>
+
+
+
+
+<!--    &lt;!&ndash; 根据用户名称查询用户信息 &ndash;&gt;-->
+<!--    <select id="findByUserName" resultMap="LoginResultMap">-->
+<!--        select *-->
+<!--        from sys_login_count-->
+<!--        where user_name = #{userName}-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 分页查询 &ndash;&gt;-->
+<!--    <select id="findByPage" resultMap="UserResultMap">-->
+<!--        select *-->
+<!--        from sys_user-->
+<!--                 limit #{start}, #{count}-->
+<!--    </select>-->
+
+<!--    <update id="update" parameterType="com.rb.login.model.entity.User">-->
+<!--        UPDATE-->
+<!--            `sys_user`-->
+<!--        SET `user_name`=#{user.userName},-->
+<!--            `phone`=#{user.phone},-->
+<!--            `password`=#{user.password}-->
+<!--        WHERE id = #{user.id}-->
+<!--    </update>-->
+<!--    -->
+
+<!--    &lt;!&ndash; 删除 &ndash;&gt;-->
+<!--    <delete id="delete" parameterType="java.lang.Integer">-->
+<!--        delete-->
+<!--        from sys_user-->
+<!--        where id = #{id}-->
+<!--    </delete>-->
+
+<!--    &lt;!&ndash;查询记录数&ndash;&gt;-->
+<!--    <select id="count" resultType="java.lang.Integer">-->
+<!--        select count(*)-->
+<!--        from sys_user-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash;根据用户名称查询条数&ndash;&gt;-->
+<!--    <select id="countByUserName" resultType="java.lang.Integer">-->
+<!--        select count(*)-->
+<!--        from sys_user-->
+<!--        where user_name = #{userName}-->
+<!--    </select>-->
+</mapper>

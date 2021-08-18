@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.rb.login.mapper.RoleResourceMapper">
+    <resultMap id="RoleResourceResultMap" type="com.rb.login.model.entity.RoleResource">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="resource_id" jdbcType="INTEGER" property="resourceId"/>
+    </resultMap>
+
+    <!-- 保存 -->
+    <insert id="save" parameterType="com.rb.login.model.entity.RoleResource" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+        INSERT INTO `sys_role_resource`(`role_id`, `resource_id`)
+            VALUE (#{roleResource.roleId},#{roleResource.resourceId};
+    </insert>
+
+
+    <!-- 根据角色id查询角色对应的资源ID -->
+    <select id="findByRoleId" parameterType="java.lang.Integer">
+        select resource_id
+        from sys_role_resource
+        where role_id = #{roleId}
+    </select>
+
+
+    <!-- 删除 -->
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete
+        from sys_role_resource
+        where role_id = #{roleId}
+    </delete>
+</mapper>
