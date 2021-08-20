@@ -12,15 +12,15 @@
     <insert id="save" parameterType="com.rb.login.model.entity.UserRole" useGeneratedKeys="true" keyProperty="id"
             keyColumn="id">
         INSERT INTO `sys_user_role`(`role_id`, `user_id`)
-            VALUE (#{userRole.roleId},#{userRole.userId};
+            VALUE (#{userRole.roleId},#{userRole.userId});
     </insert>
 
 
     <!-- 根据角色id查询角色对应的资源ID -->
-    <select id="findByUserId" parameterType="java.lang.Integer">
+    <select id="findByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select role_id
         from sys_user_role
-        where user_id = #{userId}
+        where user_id = #{userId};
     </select>
 
 
@@ -28,6 +28,6 @@
     <delete id="delete" parameterType="java.lang.Integer">
         delete
         from sys_user_role
-        where user_id = #{userId}
+        where user_id = #{userId};
     </delete>
 </mapper>

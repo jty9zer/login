@@ -22,27 +22,28 @@ import javax.sql.DataSource;
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
     @Autowired
     DataSource dataSource;
+
     // 声明TokenStore实现 数据库存储
     @Bean
     public TokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
     }
+
     // 声明 ClientDetails实现 数据库存储
     @Bean
     public ClientDetailsService clientDetails() {
         return new JdbcClientDetailsService(dataSource);
     }
+
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         // 配置token获取和验证时的策略 (Spring Security安全表达式),可以表单提交
-        security.tokenKeyAccess( "permitAll()").checkTokenAccess("isAuthenticated()").allowFormAuthenticationForClients();
+        security.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()").allowFormAuthenticationForClients();
     }
+
     /**
      * @param clients
-     * @throws Exception
-     *
-     * 客户端模式token请求：
-     *
+     * @throws Exception 客户端模式token请求：
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {

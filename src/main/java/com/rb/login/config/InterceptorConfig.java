@@ -18,7 +18,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
 //    @Resource
 //    private AuthenticationInterceptor authenticationInterceptor;
 
-    private String exclusions = "/login,/oauth/token,/**/*.html,/**/*.js,/**/*.css,/**/*.jpg,/**/*.png,/**/*.ttf,/**/*.woff,/**/*.woff2";
+    private String exclusions = "/oauth2/**,/login,/oauth/token,/**/*.html,/**/*.js,/**/*.css,/**/*.jpg,/**/*.png,/**/*.ttf,/**/*.woff,/**/*.woff2";
 
     @Override
     public void addInterceptors(InterceptorRegistry registry){

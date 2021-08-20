@@ -17,7 +17,7 @@
 
 
     <!-- 根据角色id查询角色对应的资源ID -->
-    <select id="findByRoleId" parameterType="java.lang.Integer">
+    <select id="findByRoleId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         select resource_id
         from sys_role_resource
         where role_id = #{roleId}
